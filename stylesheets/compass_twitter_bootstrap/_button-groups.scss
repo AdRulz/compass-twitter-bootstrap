@@ -7,16 +7,20 @@
 .btn-group {
   position: relative;
   display: inline-block;
-  @include ctb-ie7-inline-block();
+  @include ie7-inline-block();
   font-size: 0; // remove as part 1 of font-size inline-block hack
   vertical-align: middle; // match .btn alignment given font-size hack above
   white-space: nowrap; // prevent buttons from wrapping when in tight spaces (e.g., the table on the tests page)
-  @include ctb-ie7-restore-left-whitespace();
+  @include ie7-restore-left-whitespace();
 }
 
 // Space out series of button groups
-.btn-group + .btn-group {
+
+.btn-group{
   margin-left: 5px;
+  &:first-of-type{
+    margin-left: 0;
+  }
 }
 
 // Optional: Group multiple button groups together for a toolbar
@@ -24,9 +28,9 @@
   font-size: 0; // Hack to remove whitespace that results from using inline-block
   margin-top: $baseLineHeight / 2;
   margin-bottom: $baseLineHeight / 2;
-  .btn + .btn,
-  .btn-group + .btn,
-  .btn + .btn-group {
+  .btn:nth-of-type(2),
+  .btn-group:nth-of-type(2),
+  .btn:nth-of-type(2){
     margin-left: 5px;
   }
 }
@@ -34,10 +38,13 @@
 // Float them, remove border radius, then re-add to first and last elements
 .btn-group > .btn {
   position: relative;
-  @include ctb-border-radius(0);
+  @include border-radius(0);
 }
-.btn-group > .btn + .btn {
+.btn-group .btn {
   margin-left: -1px;
+  &:first-of-type{
+    margin-left: 0;
+  }
 }
 .btn-group > .btn,
 .btn-group > .dropdown-menu {
@@ -55,8 +62,8 @@
   font-size: 16px;
 }
 
-// Set corners individual because sometimes a single button can be in a .btn-group and we need :first-child and :last-child to both match
-.btn-group > .btn:first-child {
+// Set corners individual because sometimes a single button can be in a .btn-group and we need :first-of-type and :last-of-type to both match
+.btn-group > .btn:first-of-type {
   margin-left: 0;
      -webkit-border-top-left-radius: 4px;
          -moz-border-radius-topleft: 4px;
@@ -65,8 +72,8 @@
       -moz-border-radius-bottomleft: 4px;
           border-bottom-left-radius: 4px;
 }
-// Need .dropdown-toggle since :last-child doesn't apply given a .dropdown-menu immediately after it
-.btn-group > .btn:last-child,
+// Need .dropdown-toggle since :last-of-type doesn't apply given a .dropdown-menu immediately after it
+.btn-group > .btn:last-of-type,
 .btn-group > .dropdown-toggle {
      -webkit-border-top-right-radius: 4px;
          -moz-border-radius-topright: 4px;
@@ -76,7 +83,7 @@
           border-bottom-right-radius: 4px;
 }
 // Reset corners for large buttons
-.btn-group > .btn.large:first-child {
+.btn-group > .btn.large:first-of-type {
   margin-left: 0;
      -webkit-border-top-left-radius: 6px;
          -moz-border-radius-topleft: 6px;
@@ -85,7 +92,7 @@
       -moz-border-radius-bottomleft: 6px;
           border-bottom-left-radius: 6px;
 }
-.btn-group > .btn.large:last-child,
+.btn-group > .btn.large:last-of-type,
 .btn-group > .large.dropdown-toggle {
      -webkit-border-top-right-radius: 6px;
          -moz-border-radius-topright: 6px;
@@ -115,24 +122,24 @@
 // ----------------------
 
 // Give the line between buttons some depth
-.btn-group > .btn + .dropdown-toggle {
+.btn-group > .btn.dropdown-toggle:nth-of-type(2) {
   padding-left: 8px;
   padding-right: 8px;
-  @include ctb-box-shadow(#{inset 1px 0 0 rgba(255,255,255,.125), inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)});
+  @include box-shadow(#{inset 1px 0 0 rgba(255,255,255,.125), inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)});
   *padding-top: 5px;
   *padding-bottom: 5px;
 }
-.btn-group > .btn-mini + .dropdown-toggle {
+.btn-group > .btn-mini.dropdown-toggle:nth-of-type(2) {
   padding-left: 5px;
   padding-right: 5px;
   *padding-top: 2px;
   *padding-bottom: 2px;
 }
-.btn-group > .btn-small + .dropdown-toggle {
+.btn-group > .btn-small.dropdown-toggle:nth-of-type(2) {
   *padding-top: 5px;
   *padding-bottom: 4px;
 }
-.btn-group > .btn-large + .dropdown-toggle {
+.btn-group > .btn-large.dropdown-toggle:nth-of-type(2) {
   padding-left: 12px;
   padding-right: 12px;
   *padding-top: 7px;
@@ -145,7 +152,7 @@
   // Remove the gradient and set the same inset shadow as the :active state
   .dropdown-toggle {
     background-image: none;
-    @include ctb-box-shadow(#{inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)});
+    @include box-shadow(#{inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)});
   }
 
   // Keep the hover's background when dropdown is open
@@ -216,27 +223,27 @@
 
 .btn-group-vertical {
   display: inline-block; // makes buttons only take up the width they need
-  @include ctb-ie7-inline-block();
+  @include ie7-inline-block();
 }
 .btn-group-vertical .btn {
   display: block;
   float: none;
   width: 100%;
-  @include ctb-border-radius(0);
+  @include border-radius(0);
 }
-.btn-group-vertical .btn + .btn {
+.btn-group-vertical .btn:nth-of-type(2) {
   margin-left: 0;
   margin-top: -1px;
 }
-.btn-group-vertical .btn:first-child {
-  @include ctb-border-radius(4px 4px 0 0);
+.btn-group-vertical .btn:first-of-type {
+  @include border-radius(4px 4px 0 0);
 }
-.btn-group-vertical .btn:last-child {
-  @include ctb-border-radius(0 0 4px 4px);
+.btn-group-vertical .btn:last-of-type {
+  @include border-radius(0 0 4px 4px);
 }
-.btn-group-vertical .btn-large:first-child {
-  @include ctb-border-radius(6px 6px 0 0);
+.btn-group-vertical .btn-large:first-of-type {
+  @include border-radius(6px 6px 0 0);
 }
-.btn-group-vertical .btn-large:last-child {
-  @include ctb-border-radius(0 0 6px 6px);
+.btn-group-vertical .btn-large:last-of-type {
+  @include border-radius(0 0 6px 6px);
 }
